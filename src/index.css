@@ -1,0 +1,91 @@
+:root {
+    background: black;
+    color: white;
+    font-family: "Courier New";
+    font-size: 25px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+.header {
+    height: 10vh;
+}
+
+.game {
+    display: flex;
+    gap: 1rem;
+    height: 90vh;
+}
+
+.map {
+    width: 60vw;
+    background: black;
+    gap: 0.1rem;
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+}
+
+.grass-tile {
+    background: green;
+}
+
+.path-tile {
+    background: saddlebrown;
+}
+
+.tower-tile {
+    background: gray;
+}
+
+.enemy-tile {
+    background: red;
+}
+
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.shop {
+    width: 30vw;
+    background: saddlebrown;
+    height: 50vh;
+}
+
+.item {
+    background: blue;
+    cursor: move;
+    user-select: none;
+    height: 4rem;
+    width: 4rem;
+}
+
+.start-button {
+    width: 30vw;
+    height: 20vh;
+    background: green;
+    font-size: inherit;
+    font-family: inherit;
+    border: none;
+    border-radius: 10px;
+    transition: 0.1s;
+}
+
+.start-button:hover {
+    transform: scale(0.95);
+}
+
+.start-button:active {
+    transform: scale(0.9);
+}
