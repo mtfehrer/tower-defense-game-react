@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Grass, Path, Tower, Enemy } from "./data/Classes";
 import Map from "./components/Map/Map";
 import Shop from "./components/Shop/Shop";
-import useGame from "./useGame";
+import useGame from "./hooks/useGame";
+import useGameLoop from "./hooks/useGameLoop";
 
 const App: React.FC = () => {
     const {
@@ -17,22 +18,13 @@ const App: React.FC = () => {
         (Grass | Path | Tower | Enemy)[]
     >([]);
 
-    const [frameTime, setFrameTime] = useState<number>();
-
-    useEffect(() => {
-        let frameId: number;
-        const frame = (time: number) => {
-            setFrameTime(time);
-            frameId = requestAnimationFrame(frame);
-        };
-        requestAnimationFrame(frame);
-        return () => cancelAnimationFrame(frameId);
-    }, []);
-
-    useEffect(() => {
+    //Function gets called every frame
+    function callback() {
         update();
         setMapDisplay(getMapDisplay());
-    }, [frameTime]);
+    }
+
+    useGameLoop(callback, 60);
 
     return (
         <div className="app">

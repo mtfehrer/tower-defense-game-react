@@ -1,8 +1,8 @@
-import { Grass, Path, Tower, Enemy } from "./data/Classes";
-import { TowerType, EnemyType } from "./data/Types";
+import { Grass, Path, Tower, Enemy } from "../data/Classes";
+import { TowerType, EnemyType } from "../data/Types";
 import { useRef } from "react";
-import parsedMap from "./data/mapParser";
-import wavesData from "./data/wavesData.json";
+import parsedMap from "../data/mapParser";
+import wavesData from "../data/wavesData.json";
 
 const useGame = () => {
     const mapData = useRef<(Grass | Path)[]>(parsedMap);
