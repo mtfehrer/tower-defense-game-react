@@ -17,14 +17,25 @@ const App: React.FC = () => {
         (Grass | Path | Tower | Enemy)[]
     >([]);
 
+    const [frameTime, setFrameTime] = useState<number>();
+
     useEffect(() => {
-        setInterval(() => {
-            setMapDisplay(getMapDisplay());
-        }, 500);
+        let frameId: number;
+        const frame = (time: number) => {
+            setFrameTime(time);
+            frameId = requestAnimationFrame(frame);
+        };
+        requestAnimationFrame(frame);
+        return () => cancelAnimationFrame(frameId);
     }, []);
 
+    useEffect(() => {
+        update();
+        setMapDisplay(getMapDisplay());
+    }, [frameTime]);
+
     return (
-        <>
+        <div className="app">
             <header>
                 <h1>Tower Defense</h1>
             </header>
@@ -40,13 +51,13 @@ const App: React.FC = () => {
                     />
                     <button
                         className="start-button"
-                        v-on:click="pressStartWaveButton"
+                        onClick={pressStartWaveButton}
                     >
                         start
                     </button>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

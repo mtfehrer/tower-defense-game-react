@@ -1,0 +1,9 @@
+@import "../../default.css";
+
+.item {
+    background: blue;
+    cursor: move;
+    user-select: none;
+    height: 4rem;
+    width: 4rem;
+}

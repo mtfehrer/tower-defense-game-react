@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import "./Tile.css";
 
 interface Props {
     tileClass: string;

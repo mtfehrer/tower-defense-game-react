@@ -1,0 +1,9 @@
+@import "../../default.css";
+
+.map {
+    width: 60vw;
+    background: black;
+    gap: 0.1rem;
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+}

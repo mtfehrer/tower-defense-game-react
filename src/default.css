@@ -1,0 +1,11 @@
+:root {
+    background: black;
+    color: white;
+    font-family: "Courier New";
+    font-size: 25px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}

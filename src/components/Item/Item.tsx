@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { TowerType } from "../../data/Types";
+import "./Item.css";
 
 type Props = {
     name: string;

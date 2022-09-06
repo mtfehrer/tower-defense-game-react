@@ -1,0 +1,17 @@
+@import "../../default.css";
+
+.grass-tile {
+    background: green;
+}
+
+.path-tile {
+    background: saddlebrown;
+}
+
+.tower-tile {
+    background: gray;
+}
+
+.enemy-tile {
+    background: red;
+}

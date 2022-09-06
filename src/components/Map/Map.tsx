@@ -1,5 +1,6 @@
 import Tile from "../Tile/Tile";
 import { Grass, Path, Tower, Enemy } from "../../data/Classes";
+import "./Map.css";
 
 interface Props {
     mapDisplay: (Grass | Path | Tower | Enemy)[];

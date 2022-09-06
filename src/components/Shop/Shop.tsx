@@ -1,5 +1,6 @@
 import Item from "../Item/Item";
 import { TowerType } from "../../data/Types";
+import "./Shop.css";
 
 type Props = {
     placeTower: (towerType: TowerType) => void;
