@@ -7,7 +7,7 @@ import wavesData from "../data/wavesData.json";
 const useGame = () => {
     const mapData = useRef<(Grass | Path)[]>(parsedMap);
     const mapDisplay = useRef<(Grass | Path | Tower | Enemy)[]>([]);
-    const gameState = useRef<"Build" | "Defend" | "End">("Build");
+    const gameState = useRef<"Build" | "Defend" | "End Game">("Build");
     const startWaveButton = useRef<"Waiting" | "Pressed" | "Disabled">(
         "Waiting"
     );
@@ -15,18 +15,32 @@ const useGame = () => {
     const waveIndex = useRef<number>(0);
     const enemies = useRef<Enemy[]>([]);
     const towers = useRef<Tower[]>([]);
+    const lives = useRef<number>(5);
+    const money = useRef<number>(100);
+
+    const pathEndNumber = useRef<number>(0);
+    mapData.current.map((t) => {
+        if (t instanceof Path && t.pathNumber > pathEndNumber.current) {
+            pathEndNumber.current = t.pathNumber;
+        }
+        return null;
+    });
 
     //Gets called every frame (1/60)s
     function frameUpdate(): void {
         if (gameState.current === "Build") {
             if (startWaveButton.current === "Pressed") {
                 startWaveButton.current = "Disabled";
+                gameState.current = "Defend";
                 startWave();
-                //startWaveButton.value = "Waiting"
             }
         } else if (gameState.current === "Defend") {
-            //pass
-        } else if (gameState.current === "End") {
+            if (enemies.current.length === 0) {
+                startWaveButton.current = "Waiting";
+                gameState.current = "Build";
+                //add money
+            }
+        } else if (gameState.current === "End Game") {
             //pass
         }
         draw();
@@ -35,17 +49,29 @@ const useGame = () => {
     //Gets called every second
     function eventUpdate() {
         if (gameState.current === "Defend") {
-            for (let enemy of enemies.current) {
-                enemy.pathNumber += 1;
-                enemy.index = getIndexFromPathNumber(
-                    enemy.pathNumber
+            for (let i = 0; i < enemies.current.length; i++) {
+                if (enemies.current[i].pathNumber === pathEndNumber.current) {
+                    enemies.current = enemies.current.filter(
+                        (e) => e.pathNumber !== pathEndNumber.current
+                    );
+                    lives.current -= 1;
+                    continue;
+                }
+
+                enemies.current[i].pathNumber += 1;
+                enemies.current[i].index = getIndexFromPathNumber(
+                    enemies.current[i].pathNumber
                 ) as number;
+            }
+
+            if (lives.current === 0) {
+                gameState.current = "End Game";
             }
         }
     }
 
     function draw(): void {
-        mapDisplay.current = mapData.current;
+        mapDisplay.current = mapData.current.slice();
         for (const enemy of enemies.current) {
             mapDisplay.current[enemy.index] = enemy;
         }
@@ -54,16 +80,23 @@ const useGame = () => {
         }
     }
 
-    function getMapDisplay(): (Grass | Path | Tower | Enemy)[] {
-        return mapDisplay.current;
-    }
-
-    function setSelectedTileIndex(index: number | null): void {
-        selectedTileIndex.current = index;
+    function startWave(): void {
+        let tempPathNumber = 0;
+        for (let enemyName of wavesData[waveIndex.current]) {
+            enemies.current.push(
+                new Enemy(
+                    enemyName as EnemyType,
+                    tempPathNumber,
+                    getIndexFromPathNumber(tempPathNumber) as number
+                )
+            );
+            tempPathNumber -= 3;
+        }
+        waveIndex.current++;
     }
 
     function placeTower(towerType: TowerType) {
-        if (gameState.current !== "End") {
+        if (gameState.current !== "End Game") {
             if (
                 mapData.current[selectedTileIndex.current as number] instanceof
                 Grass
@@ -76,10 +109,6 @@ const useGame = () => {
         }
     }
 
-    function pressStartWaveButton(): void {
-        startWaveButton.current = "Pressed";
-    }
-
     function getIndexFromPathNumber(input: number): number | null {
         for (let t of mapData.current) {
             if (t instanceof Path && t.pathNumber === input) {
@@ -89,25 +118,21 @@ const useGame = () => {
         return null;
     }
 
-    function startWave(): void {
-        if (gameState.current === "Build") {
-            gameState.current = "Defend";
-            let tempPathNumber = 0;
-            for (let enemyName of wavesData[waveIndex.current]) {
-                enemies.current.push(
-                    new Enemy(
-                        enemyName as EnemyType,
-                        tempPathNumber,
-                        getIndexFromPathNumber(tempPathNumber) as number
-                    )
-                );
-                tempPathNumber -= 3;
-            }
-            waveIndex.current++;
-        }
+    function pressStartWaveButton(): void {
+        startWaveButton.current = "Pressed";
+    }
+
+    function getMapDisplay(): (Grass | Path | Tower | Enemy)[] {
+        return mapDisplay.current;
+    }
+
+    function setSelectedTileIndex(index: number | null): void {
+        selectedTileIndex.current = index;
     }
 
     return {
+        lives,
+        money,
         frameUpdate,
         eventUpdate,
         getMapDisplay,

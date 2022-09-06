@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Grass, Path, Tower, Enemy } from "./data/Classes";
 import Map from "./components/Map/Map";
 import Shop from "./components/Shop/Shop";
@@ -7,6 +7,8 @@ import useGameLoop from "./hooks/useGameLoop";
 
 const App: React.FC = () => {
     const {
+        lives,
+        money,
         frameUpdate,
         eventUpdate,
         getMapDisplay,
@@ -24,7 +26,7 @@ const App: React.FC = () => {
         setMapDisplay(getMapDisplay());
     }
 
-    useGameLoop(frameUpdateWrapper, eventUpdate, 60, 1000);
+    useGameLoop(frameUpdateWrapper, eventUpdate, 60, 250);
 
     return (
         <div className="app">
@@ -37,7 +39,9 @@ const App: React.FC = () => {
                     setSelectedTileIndex={setSelectedTileIndex}
                 />
                 <div className="side-panel">
+                    <h1>Lives: {lives.current}</h1>
                     <Shop
+                        money={money.current}
                         placeTower={placeTower}
                         setSelectedTileIndex={setSelectedTileIndex}
                     />

@@ -1,5 +1,1 @@
-[
-    ["bandit", "bandit", "bandit"],
-    ["goblin", "goblin"],
-    ["zombie", "zombie", "zombie"]
-]
+[["bandit"], ["bandit", "bandit"], ["bandit", "bandit", "bandit"]]
