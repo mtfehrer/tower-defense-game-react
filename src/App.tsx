@@ -7,7 +7,8 @@ import useGameLoop from "./hooks/useGameLoop";
 
 const App: React.FC = () => {
     const {
-        update,
+        frameUpdate,
+        eventUpdate,
         getMapDisplay,
         setSelectedTileIndex,
         placeTower,
@@ -18,13 +19,12 @@ const App: React.FC = () => {
         (Grass | Path | Tower | Enemy)[]
     >([]);
 
-    //Function gets called every frame
-    function callback() {
-        update();
+    function frameUpdateWrapper() {
+        frameUpdate();
         setMapDisplay(getMapDisplay());
     }
 
-    useGameLoop(callback, 60);
+    useGameLoop(frameUpdateWrapper, eventUpdate, 60, 1000);
 
     return (
         <div className="app">

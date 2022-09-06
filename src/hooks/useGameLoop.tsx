@@ -1,7 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 
-const useGameLoop = (callback: () => void, framerate: number) => {
-    const [frameTime, setFrameTime] = useState<number>();
+const useGameLoop = (
+    frameUpdateCallback: () => void,
+    eventUpdateCallback: () => void,
+    framerate: number,
+    eventUpdateTime: number
+) => {
+    const [frameTime, setFrameTime] = useState<number>(0);
+    const startTime = useRef<number | null>(null);
 
     useEffect(() => {
         let frameId: number;
@@ -15,7 +21,15 @@ const useGameLoop = (callback: () => void, framerate: number) => {
 
     //Calls the callback function every time the frame time is updated
     useEffect(() => {
-        callback();
+        frameUpdateCallback();
+        if (startTime.current === null) {
+            startTime.current = frameTime;
+        }
+        const elapsed = frameTime - startTime.current;
+        if (elapsed > eventUpdateTime) {
+            eventUpdateCallback();
+            startTime.current = null;
+        }
     }, [frameTime]);
 };
 

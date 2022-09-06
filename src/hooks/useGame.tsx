@@ -16,7 +16,8 @@ const useGame = () => {
     const enemies = useRef<Enemy[]>([]);
     const towers = useRef<Tower[]>([]);
 
-    function update(): void {
+    //Gets called every frame (1/60)s
+    function frameUpdate(): void {
         if (gameState.current === "Build") {
             if (startWaveButton.current === "Pressed") {
                 startWaveButton.current = "Disabled";
@@ -24,15 +25,23 @@ const useGame = () => {
                 //startWaveButton.value = "Waiting"
             }
         } else if (gameState.current === "Defend") {
+            //pass
+        } else if (gameState.current === "End") {
+            //pass
+        }
+        draw();
+    }
+
+    //Gets called every second
+    function eventUpdate() {
+        if (gameState.current === "Defend") {
             for (let enemy of enemies.current) {
                 enemy.pathNumber += 1;
                 enemy.index = getIndexFromPathNumber(
                     enemy.pathNumber
                 ) as number;
             }
-        } else if (gameState.current === "End") {
         }
-        draw();
     }
 
     function draw(): void {
@@ -99,7 +108,8 @@ const useGame = () => {
     }
 
     return {
-        update,
+        frameUpdate,
+        eventUpdate,
         getMapDisplay,
         setSelectedTileIndex,
         placeTower,
