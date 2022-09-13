@@ -1,3 +1,13 @@
+//todo
+//add text to tiles
+//implement tower attack
+//add new enemies and towers
+//change map
+//add more waves
+//implement end state
+//make ui pretty
+//tiles should be a set size
+
 import { useState } from "react";
 import { Grass, Path, Tower, Enemy } from "./data/Classes";
 import Map from "./components/Map/Map";
