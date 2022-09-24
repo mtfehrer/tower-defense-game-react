@@ -44,6 +44,10 @@ class Tower extends Tile {
         this.range = towerData[towerType as keyof typeof towerData].range;
         this.damage = towerData[towerType as keyof typeof towerData].damage;
     }
+
+    updateText(action: string) {
+        this.text = this.type + " " + action;
+    }
 }
 
 class Enemy extends Tile {
@@ -61,7 +65,7 @@ class Enemy extends Tile {
     }
 
     updateText() {
-        this.text = this.type + " - " + this.health;
+        this.text = this.type + " " + this.health;
     }
 }
 

@@ -30,7 +30,7 @@ const useGame = () => {
 
     //Gets called every frame (1/60)s
     //Handles only instantaneous changes
-    function frameUpdate(): void {
+    function frameUpdate() {
         if (gameState.current === "Build") {
             if (startWaveButton.current === "Pressed") {
                 startWaveButton.current = "Disabled";
@@ -41,7 +41,6 @@ const useGame = () => {
             if (enemies.current.length === 0) {
                 startWaveButton.current = "Waiting";
                 gameState.current = "Build";
-                //add money
                 money.current += 100;
             }
         } else if (gameState.current === "End Game") {
@@ -54,52 +53,8 @@ const useGame = () => {
     //Handles game updates
     function eventUpdate() {
         if (gameState.current === "Defend") {
-            //Update enemies
-            for (let i = 0; i < enemies.current.length; i++) {
-                if (enemies.current[i].pathNumber === pathEndNumber.current) {
-                    enemies.current = enemies.current.filter(
-                        (e) => e.pathNumber !== pathEndNumber.current
-                    );
-                    lives.current -= 1;
-                    continue;
-                }
-
-                enemies.current[i].pathNumber += 1;
-                enemies.current[i].index = getIndexFromPathNumber(
-                    enemies.current[i].pathNumber,
-                    mapData.current
-                ) as number;
-
-                enemies.current[i].updateText();
-            }
-
-            //Update towers
-            for (let i = 0; i < towers.current.length; i++) {
-                //reset text
-                towers.current[i].text = towers.current[i].type;
-
-                //Second argument represents the radius
-                let indexList = getIndexesOfTilesAround(
-                    towers.current[i].index,
-                    1
-                );
-
-                let tilesAround: (Grass | Path | Tower | Enemy)[] = [];
-                for (let t of indexList) {
-                    tilesAround.push(mapDisplay.current[indexList[i]]);
-                }
-
-                for (let tile of tilesAround) {
-                    if (tile instanceof Enemy) {
-                        //attack the enemy
-                        tile.health -= towers.current[i].damage;
-
-                        //update tower text
-                        towers.current[i].text =
-                            towers.current[i].type + " attacking";
-                    }
-                }
-            }
+            updateEnemies();
+            updateTowers();
 
             if (lives.current === 0) {
                 gameState.current = "End Game";
@@ -107,7 +62,55 @@ const useGame = () => {
         }
     }
 
-    function draw(): void {
+    function updateTowers() {
+        for (let i = 0; i < towers.current.length; i++) {
+            //reset text
+            towers.current[i].updateText("idle");
+
+            //Second argument represents the radius
+            let indexList = getIndexesOfTilesAround(towers.current[i].index, 1);
+
+            let tilesAround: (Grass | Path | Tower | Enemy)[] = [];
+            for (let t of indexList) {
+                tilesAround.push(mapDisplay.current[indexList[i]]);
+            }
+
+            for (let tile of tilesAround) {
+                if (tile instanceof Enemy) {
+                    //attack the enemy
+                    tile.health -= towers.current[i].damage;
+
+                    towers.current[i].updateText("attacking");
+                }
+            }
+        }
+    }
+
+    function updateEnemies() {
+        for (let i = 0; i < enemies.current.length; i++) {
+            if (enemies.current[i].pathNumber === pathEndNumber.current) {
+                enemies.current = enemies.current.filter(
+                    (e) => e.pathNumber !== pathEndNumber.current
+                );
+                lives.current -= 1;
+                continue;
+            }
+
+            enemies.current[i].pathNumber += 1;
+            enemies.current[i].index = getIndexFromPathNumber(
+                enemies.current[i].pathNumber,
+                mapData.current
+            ) as number;
+
+            enemies.current[i].updateText();
+        }
+    }
+
+    function updateTowerText(tower: Tower, action: string) {
+        tower.text = tower.type + " " + action;
+    }
+
+    function draw() {
         mapDisplay.current = mapData.current.slice();
         for (const enemy of enemies.current) {
             mapDisplay.current[enemy.index] = enemy;
@@ -117,7 +120,7 @@ const useGame = () => {
         }
     }
 
-    function startWave(): void {
+    function startWave() {
         let tempPathNumber = 0;
         for (let enemyName of wavesData[waveIndex.current]) {
             enemies.current.push(
@@ -149,7 +152,7 @@ const useGame = () => {
         }
     }
 
-    function pressStartWaveButton(): void {
+    function pressStartWaveButton() {
         startWaveButton.current = "Pressed";
     }
 
@@ -157,7 +160,7 @@ const useGame = () => {
         return mapDisplay.current;
     }
 
-    function setSelectedTileIndex(index: number | null): void {
+    function setSelectedTileIndex(index: number | null) {
         selectedTileIndex.current = index;
     }
 

@@ -1,4 +1,4 @@
-import { Grass, Path } from "../data/Classes";
+import { Grass, Path, Enemy } from "../data/Classes";
 
 const useCore = () => {
     function getPathEndNumber(mapData: (Grass | Path)[]): number {
