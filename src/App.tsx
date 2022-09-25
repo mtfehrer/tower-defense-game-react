@@ -1,6 +1,4 @@
 //todo
-//add text to tiles
-//implement tower attack
 //add new enemies and towers
 //change map
 //add more waves

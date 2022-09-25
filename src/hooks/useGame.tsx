@@ -12,6 +12,7 @@ const useGame = () => {
     const startWaveButton = useRef<"Waiting" | "Pressed" | "Disabled">(
         "Waiting"
     );
+    const markedForDeathIndexes = useRef<number[]>([]);
     const selectedTileIndex = useRef<number | null>(null);
     const pathEndNumber = useRef<number | null>(null);
     const waveIndex = useRef<number>(0);
@@ -20,11 +21,8 @@ const useGame = () => {
     const lives = useRef<number>(5);
     const money = useRef<number>(100);
 
-    const {
-        getPathEndNumber,
-        getIndexesOfTilesAround,
-        getIndexFromPathNumber,
-    } = useCore();
+    const { getPathEndNumber, getTilesAround, getIndexFromPathNumber } =
+        useCore();
 
     pathEndNumber.current = getPathEndNumber(mapData.current);
 
@@ -67,12 +65,11 @@ const useGame = () => {
             tower.updateText("idle");
 
             //Second argument represents the radius
-            let indexList = getIndexesOfTilesAround(tower.index, 1);
-
-            let tilesAround: (Grass | Path | Tower | Enemy)[] = [];
-            for (let i of indexList) {
-                tilesAround.push(mapDisplay.current[i]);
-            }
+            let tilesAround = getTilesAround(
+                tower.index,
+                tower.range,
+                mapDisplay.current
+            );
 
             for (let tile of tilesAround) {
                 if (tile instanceof Enemy) {
@@ -83,31 +80,23 @@ const useGame = () => {
                 }
             }
         }
-        // for (let i = 0; i < towers.current.length; i++) {
-        //     //reset text
-        //     towers.current[i].updateText("idle");
-
-        //     //Second argument represents the radius
-        //     let indexList = getIndexesOfTilesAround(towers.current[i].index, 1);
-
-        //     let tilesAround: (Grass | Path | Tower | Enemy)[] = [];
-        //     for (let t of indexList) {
-        //         tilesAround.push(mapDisplay.current[indexList[i]]);
-        //     }
-
-        //     for (let tile of tilesAround) {
-        //         if (tile instanceof Enemy) {
-        //             //attack the enemy
-        //             tile.health -= towers.current[i].damage;
-
-        //             towers.current[i].updateText("attacking");
-        //         }
-        //     }
-        // }
     }
 
     function updateEnemies() {
         for (let enemy of enemies.current) {
+            //Update enemy position
+            enemy.pathNumber += 1;
+            enemy.index = getIndexFromPathNumber(
+                enemy.pathNumber,
+                mapData.current
+            ) as number;
+
+            if (enemy.health <= 0) {
+                markedForDeathIndexes.current.push(enemy.index);
+                money.current += 20;
+            }
+
+            //Checks if enemy is at end of map
             if (enemy.pathNumber === pathEndNumber.current) {
                 enemies.current = enemies.current.filter(
                     (e) => e.pathNumber !== pathEndNumber.current
@@ -116,35 +105,17 @@ const useGame = () => {
                 continue;
             }
 
-            enemy.pathNumber += 1;
-            enemy.index = getIndexFromPathNumber(
-                enemy.pathNumber,
-                mapData.current
-            ) as number;
-
             enemy.updateText();
         }
-        //for (let i = 0; i < enemies.current.length; i++) {
-        // if (enemies.current[i].pathNumber === pathEndNumber.current) {
-        //     enemies.current = enemies.current.filter(
-        //         (e) => e.pathNumber !== pathEndNumber.current
-        //     );
-        //     lives.current -= 1;
-        //     continue;
-        // }
 
-        // enemies.current[i].pathNumber += 1;
-        // enemies.current[i].index = getIndexFromPathNumber(
-        //     enemies.current[i].pathNumber,
-        //     mapData.current
-        // ) as number;
-
-        // enemies.current[i].updateText();
-        //}
-    }
-
-    function updateTowerText(tower: Tower, action: string) {
-        tower.text = tower.type + " " + action;
+        for (let index of markedForDeathIndexes.current) {
+            enemies.current = enemies.current.filter((e) => {
+                if (e.index === index) {
+                    return false;
+                }
+                return true;
+            });
+        }
     }
 
     function draw() {
