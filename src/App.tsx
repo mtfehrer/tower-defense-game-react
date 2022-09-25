@@ -17,6 +17,7 @@ const App: React.FC = () => {
     const {
         lives,
         money,
+        shopMessage,
         frameUpdate,
         eventUpdate,
         getMapDisplay,
@@ -50,6 +51,7 @@ const App: React.FC = () => {
                     <h1>Lives: {lives.current}</h1>
                     <Shop
                         money={money.current}
+                        shopMessage={shopMessage.current}
                         placeTower={placeTower}
                         setSelectedTileIndex={setSelectedTileIndex}
                     />

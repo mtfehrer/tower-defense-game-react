@@ -1,7 +1,14 @@
 import type { TowerType, EnemyType } from "./Types";
 
-const towerData = { turret: { range: 1, damage: 2 } };
-const enemyData = { bandit: { health: 5, speed: 1 } };
+const towerData = {
+    turret: { range: 1, damage: 1, cssclass: "turret-tile" },
+    archer: { range: 2, damage: 1, cssclass: "archer-tile" },
+    wizard: { range: 1, damage: 2, cssclass: "wizard-tile" },
+};
+const enemyData = {
+    bandit: { health: 5, speed: 1 },
+    ogre: { health: 10, speed: 0.5 },
+};
 
 class Tile {
     cssclass: string;
@@ -40,7 +47,11 @@ class Tower extends Tile {
     damage: number;
 
     constructor(towerType: TowerType, index: number) {
-        super("tower-tile", "tower", index);
+        super(
+            towerData[towerType as keyof typeof towerData].cssclass,
+            towerType,
+            index
+        );
         this.range = towerData[towerType as keyof typeof towerData].range;
         this.damage = towerData[towerType as keyof typeof towerData].damage;
     }
@@ -57,7 +68,7 @@ class Enemy extends Tile {
     speed: number;
 
     constructor(enemyType: EnemyType, pathNumber: number, index: number) {
-        super("enemy-tile", "enemy", index);
+        super("enemy-tile", enemyType, index);
         this.enemyType = enemyType;
         this.pathNumber = pathNumber;
         this.health = enemyData[enemyType as keyof typeof enemyData].health;

@@ -12,6 +12,9 @@ const useGame = () => {
     const startWaveButton = useRef<"Waiting" | "Pressed" | "Disabled">(
         "Waiting"
     );
+    const placeTowerTest = useRef<boolean>(true);
+    const shopMessage = useRef<string>("");
+    const shopMessageCounter = useRef<number>(0);
     const markedForDeathIndexes = useRef<number[]>([]);
     const selectedTileIndex = useRef<number | null>(null);
     const pathEndNumber = useRef<number | null>(null);
@@ -23,6 +26,8 @@ const useGame = () => {
 
     const { getPathEndNumber, getTilesAround, getIndexFromPathNumber } =
         useCore();
+
+    const towerCost = { turret: 100, archer: 200, wizard: 300 };
 
     pathEndNumber.current = getPathEndNumber(mapData.current);
 
@@ -42,7 +47,7 @@ const useGame = () => {
                 money.current += 100;
             }
         } else if (gameState.current === "End Game") {
-            //pass
+            alert("Game End");
         }
         draw();
     }
@@ -58,13 +63,23 @@ const useGame = () => {
                 gameState.current = "End Game";
             }
         }
+
+        if (shopMessage.current !== "") {
+            if (shopMessageCounter.current === 7) {
+                shopMessage.current = "";
+                shopMessageCounter.current = 0;
+            } else {
+                shopMessageCounter.current += 1;
+            }
+        }
+
+        placeTowerTest.current = true;
     }
 
     function updateTowers() {
         for (let tower of towers.current) {
             tower.updateText("idle");
 
-            //Second argument represents the radius
             let tilesAround = getTilesAround(
                 tower.index,
                 tower.range,
@@ -73,7 +88,6 @@ const useGame = () => {
 
             for (let tile of tilesAround) {
                 if (tile instanceof Enemy) {
-                    //attack the enemy
                     tile.health -= tower.damage;
 
                     tower.updateText("attacking");
@@ -85,7 +99,7 @@ const useGame = () => {
     function updateEnemies() {
         for (let enemy of enemies.current) {
             //Update enemy position
-            enemy.pathNumber += 1;
+            enemy.pathNumber += enemy.speed;
             enemy.index = getIndexFromPathNumber(
                 enemy.pathNumber,
                 mapData.current
@@ -147,15 +161,38 @@ const useGame = () => {
     }
 
     function placeTower(towerType: TowerType) {
-        if (gameState.current !== "End Game") {
-            if (
-                mapData.current[selectedTileIndex.current as number] instanceof
-                Grass
-            ) {
-                //Add if statement to check if tower already there
-                towers.current.push(
-                    new Tower(towerType, selectedTileIndex.current as number)
-                );
+        //PlaceTowerTest used to prevent method from being called twice
+        if (placeTowerTest.current === true) {
+            placeTowerTest.current = false;
+            if (gameState.current !== "End Game") {
+                if (
+                    mapData.current[
+                        selectedTileIndex.current as number
+                    ] instanceof Grass
+                ) {
+                    //If statement checks if tower is already there
+                    let t =
+                        mapDisplay.current[selectedTileIndex.current as number]
+                            .type;
+                    if (t !== "turret" && t !== "archer" && t !== "wizard") {
+                        if (
+                            money.current >=
+                            towerCost[towerType as keyof typeof towerCost]
+                        ) {
+                            money.current -=
+                                towerCost[towerType as keyof typeof towerCost];
+                            towers.current.push(
+                                new Tower(
+                                    towerType,
+                                    selectedTileIndex.current as number
+                                )
+                            );
+                        } else {
+                            shopMessage.current =
+                                "You don't have enough money to buy that";
+                        }
+                    }
+                }
             }
         }
     }
@@ -175,6 +212,7 @@ const useGame = () => {
     return {
         lives,
         money,
+        shopMessage,
         frameUpdate,
         eventUpdate,
         getMapDisplay,

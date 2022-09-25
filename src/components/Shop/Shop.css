@@ -4,4 +4,25 @@
     width: 30vw;
     background: saddlebrown;
     height: 50vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.shop-header {
+    display: flex;
+    gap: 4rem;
+    align-items: center;
+}
+
+.item-display {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.shop-message {
+    margin-top: 2rem;
 }

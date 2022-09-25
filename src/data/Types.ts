@@ -1,5 +1,5 @@
-type TowerType = "turret" | "sniper";
+type TowerType = "turret" | "archer" | "wizard" | "sniper";
 
-type EnemyType = "bandit" | "zombie";
+type EnemyType = "bandit" | "ogre";
 
 export type { TowerType, EnemyType };

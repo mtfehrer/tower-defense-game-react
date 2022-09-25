@@ -8,10 +8,22 @@
     background: saddlebrown;
 }
 
-.tower-tile {
+.turret-tile {
     background: gray;
 }
 
-.enemy-tile {
+.archer-tile {
+    background: rgb(0, 211, 0);
+}
+
+.wizard-tile {
+    background: purple;
+}
+
+.bandit-tile {
     background: red;
+}
+
+.ogre-tile {
+    background: rgb(0, 55, 0);
 }
