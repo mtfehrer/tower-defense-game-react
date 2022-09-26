@@ -15,6 +15,7 @@ const useGame = () => {
     const endStateText = useRef<string>("");
     const reloadingPage = useRef<boolean>(false);
     const placeTowerTest = useRef<boolean>(true);
+    const placeTowerCooldown = useRef<number>(0);
     const shopMessage = useRef<string>("");
     const shopMessageCounter = useRef<number>(0);
     const markedForDeathIndexes = useRef<number[]>([]);
@@ -177,35 +178,45 @@ const useGame = () => {
     }
 
     function placeTower(towerType: TowerType) {
-        //PlaceTowerTest used to prevent method from being called twice
-        if (placeTowerTest.current === true) {
-            placeTowerTest.current = false;
-            if (gameState.current !== "End Game") {
-                if (
-                    mapData.current[
-                        selectedTileIndex.current as number
-                    ] instanceof Grass
-                ) {
-                    //If statement checks if tower is already there
-                    let t =
-                        mapDisplay.current[selectedTileIndex.current as number]
-                            .type;
-                    if (t !== "turret" && t !== "archer" && t !== "wizard") {
+        if (placeTowerCooldown.current > 0) {
+            console.log("PLACE TOWER");
+            //PlaceTowerTest used to prevent method from being called twice
+            if (placeTowerTest.current === true) {
+                placeTowerTest.current = false;
+                if (gameState.current !== "End Game") {
+                    if (
+                        mapData.current[
+                            selectedTileIndex.current as number
+                        ] instanceof Grass
+                    ) {
+                        //If statement checks if tower is already there
+                        let t =
+                            mapDisplay.current[
+                                selectedTileIndex.current as number
+                            ].type;
                         if (
-                            money.current >=
-                            towerCost[towerType as keyof typeof towerCost]
+                            t !== "turret" &&
+                            t !== "archer" &&
+                            t !== "wizard"
                         ) {
-                            money.current -=
-                                towerCost[towerType as keyof typeof towerCost];
-                            towers.current.push(
-                                new Tower(
-                                    towerType,
-                                    selectedTileIndex.current as number
-                                )
-                            );
-                        } else {
-                            shopMessage.current =
-                                "You don't have enough money to buy that";
+                            if (
+                                money.current >=
+                                towerCost[towerType as keyof typeof towerCost]
+                            ) {
+                                money.current -=
+                                    towerCost[
+                                        towerType as keyof typeof towerCost
+                                    ];
+                                towers.current.push(
+                                    new Tower(
+                                        towerType,
+                                        selectedTileIndex.current as number
+                                    )
+                                );
+                            } else {
+                                shopMessage.current =
+                                    "You don't have enough money to buy that";
+                            }
                         }
                     }
                 }
@@ -225,11 +236,20 @@ const useGame = () => {
         selectedTileIndex.current = index;
     }
 
+    function setPlaceTowerCooldown(command: string) {
+        if (command === "decrease") {
+            placeTowerCooldown.current -= 1;
+        } else if (command === "set") {
+            placeTowerCooldown.current = 5;
+        }
+    }
+
     return {
         lives,
         money,
         endStateText,
         shopMessage,
+        setPlaceTowerCooldown,
         startWaveButton,
         frameUpdate,
         eventUpdate,

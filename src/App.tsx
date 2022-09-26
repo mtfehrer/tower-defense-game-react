@@ -1,4 +1,5 @@
 //todo
+//fix tower drag bug
 //add more waves
 //make ui pretty
 //change start button to retry button during end state
@@ -6,7 +7,7 @@
 //remove warnings
 //build and deploy to github
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Grass, Path, Tower, Enemy } from "./data/Classes";
 import Map from "./components/Map/Map";
 import Shop from "./components/Shop/Shop";
@@ -20,6 +21,7 @@ const App: React.FC = () => {
         money,
         endStateText,
         shopMessage,
+        setPlaceTowerCooldown,
         startWaveButton,
         frameUpdate,
         eventUpdate,
@@ -32,6 +34,20 @@ const App: React.FC = () => {
     const [mapDisplay, setMapDisplay] = useState<
         (Grass | Path | Tower | Enemy)[]
     >([]);
+
+    useEffect(() => {
+        document.addEventListener("mouseover", (event) => {
+            if (event.target instanceof HTMLDivElement) {
+                //Only place tower if mouse is hovered over "grass-tile"
+                if (event.target.classList[0] === "grass-tile") {
+                    console.log("yay");
+                    setPlaceTowerCooldown("set");
+                } else {
+                    setPlaceTowerCooldown("decrease");
+                }
+            }
+        });
+    }, []);
 
     function frameUpdateWrapper() {
         frameUpdate();
