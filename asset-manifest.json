@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/tower-defense-game-react/static/css/main.bc6c5623.css",
+    "main.js": "/tower-defense-game-react/static/js/main.b37a0799.js",
+    "index.html": "/tower-defense-game-react/index.html",
+    "main.bc6c5623.css.map": "/tower-defense-game-react/static/css/main.bc6c5623.css.map",
+    "main.b37a0799.js.map": "/tower-defense-game-react/static/js/main.b37a0799.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bc6c5623.css",
+    "static/js/main.b37a0799.js"
+  ]
+}
