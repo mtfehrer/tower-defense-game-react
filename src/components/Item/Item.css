@@ -4,8 +4,20 @@
     background: blue;
     cursor: move;
     user-select: none;
-    height: 4rem;
-    width: 4rem;
+    max-height: 6rem;
+    max-width: 6rem;
+    text-align: center;
+    font-weight: bold;
+    transition: 0.1s;
+    border-radius: 10px;
+}
+
+.item:hover {
+    transform: scale(0.95);
+}
+
+.item:active {
+    transform: scale(0.9);
 }
 
 .turret-item {

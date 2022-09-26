@@ -3,16 +3,14 @@ import { TowerType } from "../../data/Types";
 import "./Item.css";
 
 type Props = {
-    name: string;
-    cost: string;
+    data: { name: string; cost: number; range: number; damage: number };
     cssclass: string;
     placeTower: (towerType: TowerType) => void;
     setSelectedTileIndex: (index: number | null) => void;
 };
 
 const Item: React.FC<Props> = ({
-    name,
-    cost,
+    data,
     cssclass,
     placeTower,
     setSelectedTileIndex,
@@ -25,13 +23,14 @@ const Item: React.FC<Props> = ({
         });
 
         itemDiv.current?.addEventListener("dragend", () => {
-            placeTower(name as TowerType);
+            placeTower(data.name as TowerType);
         });
     }, []);
 
     return (
         <div ref={itemDiv} className={"item " + cssclass} draggable="true">
-            {name}: ${cost}
+            -{data.name}- range: {data.range} damage: {data.damage} cost: $
+            {data.cost}
         </div>
     );
 };

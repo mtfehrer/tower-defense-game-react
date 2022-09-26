@@ -1,15 +1,16 @@
 //todo
-//add new enemies and towers
-//change map
 //add more waves
-//implement end state
 //make ui pretty
-//tiles should be a set size
+//change start button to retry button during end state
+//change start button to waiting while waiting
+//remove warnings
+//build and deploy to github
 
 import { useState } from "react";
 import { Grass, Path, Tower, Enemy } from "./data/Classes";
 import Map from "./components/Map/Map";
 import Shop from "./components/Shop/Shop";
+import StartButton from "./components/StartButton/StartButton";
 import useGame from "./hooks/useGame";
 import useGameLoop from "./hooks/useGameLoop";
 
@@ -17,7 +18,9 @@ const App: React.FC = () => {
     const {
         lives,
         money,
+        endStateText,
         shopMessage,
+        startWaveButton,
         frameUpdate,
         eventUpdate,
         getMapDisplay,
@@ -48,19 +51,22 @@ const App: React.FC = () => {
                     setSelectedTileIndex={setSelectedTileIndex}
                 />
                 <div className="side-panel">
-                    <h1>Lives: {lives.current}</h1>
+                    <h1 className="lives-text">
+                        Lives: {lives.current}{" "}
+                        <span className="end-state-text">
+                            {endStateText.current}
+                        </span>
+                    </h1>
                     <Shop
                         money={money.current}
                         shopMessage={shopMessage.current}
                         placeTower={placeTower}
                         setSelectedTileIndex={setSelectedTileIndex}
                     />
-                    <button
-                        className="start-button"
-                        onClick={pressStartWaveButton}
-                    >
-                        start
-                    </button>
+                    <StartButton
+                        pressStartWaveButton={pressStartWaveButton}
+                        buttonState={startWaveButton.current}
+                    />
                 </div>
             </div>
         </div>

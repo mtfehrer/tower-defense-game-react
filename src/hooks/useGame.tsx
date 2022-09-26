@@ -9,9 +9,11 @@ const useGame = () => {
     const mapData = useRef<(Grass | Path)[]>(parsedMap);
     const mapDisplay = useRef<(Grass | Path | Tower | Enemy)[]>([]);
     const gameState = useRef<"Build" | "Defend" | "End Game">("Build");
-    const startWaveButton = useRef<"Waiting" | "Pressed" | "Disabled">(
-        "Waiting"
-    );
+    const startWaveButton = useRef<
+        "Waiting" | "Pressed" | "Disabled" | "Retry"
+    >("Waiting");
+    const endStateText = useRef<string>("");
+    const reloadingPage = useRef<boolean>(false);
     const placeTowerTest = useRef<boolean>(true);
     const shopMessage = useRef<string>("");
     const shopMessageCounter = useRef<number>(0);
@@ -42,12 +44,24 @@ const useGame = () => {
             }
         } else if (gameState.current === "Defend") {
             if (enemies.current.length === 0) {
-                startWaveButton.current = "Waiting";
-                gameState.current = "Build";
-                money.current += 100;
+                if (waveIndex.current === wavesData.length) {
+                    endStateText.current = "You Win";
+                    startWaveButton.current = "Retry";
+                    gameState.current = "End Game";
+                } else {
+                    startWaveButton.current = "Waiting";
+                    gameState.current = "Build";
+                    money.current += 100;
+                }
             }
         } else if (gameState.current === "End Game") {
-            alert("Game End");
+            if (startWaveButton.current === "Pressed") {
+                //Refresh entire page
+                if (reloadingPage.current === false) {
+                    window.location.reload();
+                    reloadingPage.current = true;
+                }
+            }
         }
         draw();
     }
@@ -60,6 +74,8 @@ const useGame = () => {
             updateTowers();
 
             if (lives.current === 0) {
+                endStateText.current = "You Lose";
+                startWaveButton.current = "Retry";
                 gameState.current = "End Game";
             }
         }
@@ -89,8 +105,8 @@ const useGame = () => {
             for (let tile of tilesAround) {
                 if (tile instanceof Enemy) {
                     tile.health -= tower.damage;
-
                     tower.updateText("attack");
+                    break;
                 }
             }
         }
@@ -212,7 +228,9 @@ const useGame = () => {
     return {
         lives,
         money,
+        endStateText,
         shopMessage,
+        startWaveButton,
         frameUpdate,
         eventUpdate,
         getMapDisplay,

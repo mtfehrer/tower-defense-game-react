@@ -1,0 +1,20 @@
+@import "../../default.css";
+
+.start-button {
+    max-width: 30vw;
+    max-height: 20vh;
+    background: green;
+    font-size: 5rem;
+    font-family: inherit;
+    border: none;
+    border-radius: 10px;
+    transition: 0.1s;
+}
+
+.start-button:hover {
+    transform: scale(0.95);
+}
+
+.start-button:active {
+    transform: scale(0.9);
+}

@@ -1,5 +1,6 @@
 [
-    ["ogre", "bandit"],
+    ["bandit", "bandit", "bandit", "bandit", "bandit"],
+    ["ogre", "ogre", "ogre", "ogre", "ogre", "ogre", "ogre"],
     ["bandit", "ogre"],
     ["bandit", "ogre", "ogre"]
 ]

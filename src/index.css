@@ -7,8 +7,12 @@
     height: 100vh;
 }
 
-.header {
-    height: 10vh;
+header {
+    display: flex;
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
+    background: rgb(63, 63, 63);
 }
 
 .game {
@@ -18,27 +22,19 @@
     align-items: center;
 }
 
+.lives-text {
+    padding: 0;
+    margin: 0;
+}
+
+.end-state-text {
+    color: orange;
+}
+
 .side-panel {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-}
-
-.start-button {
-    width: 30vw;
-    height: 20vh;
-    background: green;
-    font-size: inherit;
-    font-family: inherit;
-    border: none;
-    border-radius: 10px;
-    transition: 0.1s;
-}
-
-.start-button:hover {
-    transform: scale(0.95);
-}
-
-.start-button:active {
-    transform: scale(0.9);
+    justify-content: space-evenly;
+    gap: 1rem;
+    height: 90vh;
 }

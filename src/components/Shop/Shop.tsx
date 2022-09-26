@@ -23,22 +23,19 @@ const Shop: React.FC<Props> = ({
             </div>
             <div className="item-display">
                 <Item
-                    name="turret"
-                    cost="100"
+                    data={{ name: "turret", cost: 100, range: 1, damage: 1 }}
                     cssclass="turret-item"
                     placeTower={placeTower}
                     setSelectedTileIndex={setSelectedTileIndex}
                 />
                 <Item
-                    name="archer"
-                    cost="200"
+                    data={{ name: "archer", cost: 200, range: 2, damage: 1 }}
                     cssclass="archer-item"
                     placeTower={placeTower}
                     setSelectedTileIndex={setSelectedTileIndex}
                 />
                 <Item
-                    name="wizard"
-                    cost="300"
+                    data={{ name: "wizard", cost: 300, range: 1, damage: 2 }}
                     cssclass="wizard-item"
                     placeTower={placeTower}
                     setSelectedTileIndex={setSelectedTileIndex}
