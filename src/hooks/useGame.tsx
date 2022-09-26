@@ -15,7 +15,7 @@ const useGame = () => {
     const endStateText = useRef<string>("");
     const reloadingPage = useRef<boolean>(false);
     const placeTowerTest = useRef<boolean>(true);
-    const shopMessage = useRef<string>("");
+    const shopMessage = useRef<string>("Drag a tower onto the map");
     const shopMessageCounter = useRef<number>(0);
     const markedForDeathIndexes = useRef<number[]>([]);
     const selectedTileIndex = useRef<number | null>(null);
@@ -24,7 +24,7 @@ const useGame = () => {
     const enemies = useRef<Enemy[]>([]);
     const towers = useRef<Tower[]>([]);
     const lives = useRef<number>(5);
-    const money = useRef<number>(100);
+    const money = useRef<number>(200);
 
     const { getPathEndNumber, getTilesAround, getIndexFromPathNumber } =
         useCore();
@@ -80,7 +80,10 @@ const useGame = () => {
             }
         }
 
-        if (shopMessage.current !== "") {
+        if (
+            shopMessage.current !== "" &&
+            shopMessage.current !== "Drag a tower onto the map"
+        ) {
             if (shopMessageCounter.current === 7) {
                 shopMessage.current = "";
                 shopMessageCounter.current = 0;
@@ -146,6 +149,7 @@ const useGame = () => {
                 return true;
             });
         }
+        markedForDeathIndexes.current = [];
     }
 
     function draw() {
@@ -179,6 +183,7 @@ const useGame = () => {
     function placeTower(towerType: TowerType) {
         //PlaceTowerTest used to prevent method from being called twice
         if (placeTowerTest.current === true) {
+            shopMessage.current = "";
             placeTowerTest.current = false;
             if (gameState.current !== "End Game") {
                 if (
@@ -230,6 +235,7 @@ const useGame = () => {
         money,
         endStateText,
         shopMessage,
+        waveIndex,
         startWaveButton,
         frameUpdate,
         eventUpdate,

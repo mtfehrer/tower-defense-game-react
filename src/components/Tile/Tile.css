@@ -37,7 +37,7 @@
 }
 
 .bandit-tile {
-    background: red;
+    background: rgb(56, 56, 56);
     width: 3.7vw;
     height: 8vh;
     font-size: 0.8rem;
@@ -46,6 +46,14 @@
 
 .ogre-tile {
     background: rgb(0, 55, 0);
+    width: 3.7vw;
+    height: 8vh;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.demon-tile {
+    background: rgb(255, 0, 0);
     width: 3.7vw;
     height: 8vh;
     font-size: 0.8rem;

@@ -1,11 +1,3 @@
-//todo
-//add more waves
-//make ui pretty
-//change start button to retry button during end state
-//change start button to waiting while waiting
-//remove warnings
-//build and deploy to github
-
 import { useState } from "react";
 import { Grass, Path, Tower, Enemy } from "./data/Classes";
 import Map from "./components/Map/Map";
@@ -20,6 +12,7 @@ const App: React.FC = () => {
         money,
         endStateText,
         shopMessage,
+        waveIndex,
         startWaveButton,
         frameUpdate,
         eventUpdate,
@@ -57,6 +50,7 @@ const App: React.FC = () => {
                             {endStateText.current}
                         </span>
                     </h1>
+                    <h1 className="level-text">Level: {waveIndex.current}/6</h1>
                     <Shop
                         money={money.current}
                         shopMessage={shopMessage.current}

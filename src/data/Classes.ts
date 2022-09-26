@@ -6,8 +6,9 @@ const towerData = {
     wizard: { range: 1, damage: 2, cssclass: "wizard-tile" },
 };
 const enemyData = {
-    bandit: { health: 15, speed: 1, cssclass: "bandit-tile" },
+    bandit: { health: 5, speed: 1, cssclass: "bandit-tile" },
     ogre: { health: 30, speed: 0.5, cssclass: "ogre-tile" },
+    demon: { health: 20, speed: 1, cssclass: "demon-tile" },
 };
 
 class Tile {
