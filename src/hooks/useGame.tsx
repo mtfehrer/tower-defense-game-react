@@ -90,7 +90,7 @@ const useGame = () => {
                 if (tile instanceof Enemy) {
                     tile.health -= tower.damage;
 
-                    tower.updateText("attacking");
+                    tower.updateText("attack");
                 }
             }
         }
@@ -101,7 +101,7 @@ const useGame = () => {
             //Update enemy position
             enemy.pathNumber += enemy.speed;
             enemy.index = getIndexFromPathNumber(
-                enemy.pathNumber,
+                Math.floor(enemy.pathNumber),
                 mapData.current
             ) as number;
 

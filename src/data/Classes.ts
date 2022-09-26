@@ -6,8 +6,8 @@ const towerData = {
     wizard: { range: 1, damage: 2, cssclass: "wizard-tile" },
 };
 const enemyData = {
-    bandit: { health: 5, speed: 1 },
-    ogre: { health: 10, speed: 0.5 },
+    bandit: { health: 5, speed: 1, cssclass: "bandit-tile" },
+    ogre: { health: 10, speed: 0.5, cssclass: "ogre-tile" },
 };
 
 class Tile {
@@ -68,7 +68,11 @@ class Enemy extends Tile {
     speed: number;
 
     constructor(enemyType: EnemyType, pathNumber: number, index: number) {
-        super("enemy-tile", enemyType, index);
+        super(
+            enemyData[enemyType as keyof typeof enemyData].cssclass,
+            enemyType,
+            index
+        );
         this.enemyType = enemyType;
         this.pathNumber = pathNumber;
         this.health = enemyData[enemyType as keyof typeof enemyData].health;

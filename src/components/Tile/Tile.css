@@ -2,28 +2,52 @@
 
 .grass-tile {
     background: green;
+    width: 3.7vw;
+    height: 8vh;
 }
 
 .path-tile {
     background: saddlebrown;
+    width: 3.7vw;
+    height: 8vh;
 }
 
 .turret-tile {
     background: gray;
+    width: 3.7vw;
+    height: 8vh;
+    font-size: 0.8rem;
+    text-align: center;
 }
 
 .archer-tile {
     background: rgb(0, 211, 0);
+    width: 3.7vw;
+    height: 8vh;
+    font-size: 0.8rem;
+    text-align: center;
 }
 
 .wizard-tile {
     background: purple;
+    width: 3.7vw;
+    height: 8vh;
+    font-size: 0.8rem;
+    text-align: center;
 }
 
 .bandit-tile {
     background: red;
+    width: 3.7vw;
+    height: 8vh;
+    font-size: 0.8rem;
+    text-align: center;
 }
 
 .ogre-tile {
     background: rgb(0, 55, 0);
+    width: 3.7vw;
+    height: 8vh;
+    font-size: 0.8rem;
+    text-align: center;
 }

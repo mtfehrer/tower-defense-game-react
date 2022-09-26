@@ -1,4 +1,4 @@
-import simpleMap from "./simpleMap.json";
+import simpleMap from "./simpleMap2.json";
 import { Grass, Path } from "./Classes";
 
 let map: (Grass | Path)[] = [];
